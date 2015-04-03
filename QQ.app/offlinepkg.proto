@@ -1,0 +1,32 @@
+option optimize_for = LITE_RUNTIME;
+package tencent.im.sso.offlinpkg;
+
+enum Cmd
+{
+	Invalid = 0;
+	
+	QUERY_EXPIRED_PKG		= 1;					// 查询过期包
+};
+
+message BidPkg
+{
+	optional uint32 uint32_bid = 1;							// 业务bid
+	repeated uint32 uint32_pkg_id = 2;				// 业务对应的包id
+};
+
+message ReqBody
+{
+	optional uint32 uint32_cmd = 1;					// 取Cmd枚举值
+	optional uint32 uint32_platform = 2;			// 终端平台，android or ios
+	repeated BidPkg st_bid_pkg = 3;					// 要查询的业务包
+};
+
+message RspBody 
+{	
+	optional int32	int32_ret = 1;					// 0 - 命令处理成功	
+	optional bytes	str_err_desc = 2;				// int32_ret != 0 时的错误描述
+	
+	optional bytes	str_expire_pkg = 3;				// 过期包数据；json格式
+	optional bytes	str_predown_pkg = 4;			// 预下载包数据；json格式
+};
+

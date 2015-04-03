@@ -1,0 +1,21 @@
+{
+    "default_style":
+        {
+            "auth" : 0,
+            "hide" : 0,
+            "image_white" : "http://imgcache.gtimg.cn/club/mobile/profile/template/default_v_53.jpg",
+            "image_black" : "http://imgcache.gtimg.cn/club/mobile/profile/template/default_v_53.jpg",
+            "image_whitesmall" : "http://imgcache.gtimg.cn/club/mobile/profile/template/default_v_53.jpg",
+            "image_blacksmall" : "http://imgcache.gtimg.cn/club/mobile/profile/template/default_v_53.jpg",
+            "name" : "默认",
+            "style" : 0,
+            "tag" : 2,
+            "tag_btime" : 1392273847,
+            "tag_etime" : 1394865847,
+            "template_btime" : 0,
+            "template_etime" : 1,
+            "limitefree_type": 0,
+            "limitefree_btime":0,
+            "limitefree_etime":0
+        }
+}

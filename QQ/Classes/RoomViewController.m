@@ -121,6 +121,7 @@
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     [self.messageArray removeAllObjects];
+
     for(XMPPMessageArchiving_Message_CoreDataObject* object in [[self fetchedResultsController] fetchedObjects]){
         if(![object.message.fromStr isEqualToString:self.xmppRoom.myRoomJID.full]){
             [self.messageArray addObject:object];
@@ -280,27 +281,7 @@
 }
 
 
-#pragma mark - UITextField Delegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [self sendMessage];
-    [self.messageTextField setText:nil];
-    
-    return YES;
-}
 
-
-- (void)sendMessage{
-//    XMPPMessage *message = [XMPPMessage messageWithType:@"chat" to:self.xmppUserObject.jid];
-//    [message addBody:self.messageTextField.text];
-//    [[[self appDelegate] xmppStream] sendElement:message];
-    
-//    [self.xmppRoom sendMessageWithBody:self.messageTextField.text];
-    
-    XMPPMessage *message = [XMPPMessage messageWithType:@"string" to:self.xmppRoom.roomJID];
-    [message addBody:self.messageTextField.text];
-    [[[self appDelegate] xmppStream] sendElement:message];
-}
 
 
 -(IBAction)voice:(id)sender
@@ -370,6 +351,23 @@
         }];
     }
 
+}
+
+
+#pragma mark - UITextField Delegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self sendMessage];
+    [self.messageTextField setText:nil];
+    
+    return YES;
+}
+
+
+- (void)sendMessage{
+    XMPPMessage *message = [XMPPMessage messageWithType:@"string" to:self.xmppRoom.roomJID];
+    [message addBody:self.messageTextField.text];
+    [[[self appDelegate] xmppStream] sendElement:message];
 }
 
 

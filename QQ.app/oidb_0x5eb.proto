@@ -1,0 +1,109 @@
+option optimize_for = LITE_RUNTIME;
+package tencent.im.oidb.cmd0x5eb;
+
+message ReqBody
+{
+    repeated uint64 rpt_uint64_uins = 1; // UIN列表
+    optional uint32 uint32_max_package_size = 3; // 自定义分包大小，如果回包大小大于这个值，无法被处理的uin会带在包体中返回
+    repeated bytes rpt_bytes_openid = 4; // openid列表, openid列表和UIN列表2选1
+    optional uint32 uint32_appid = 5; //跟openid列表对应的appid，如果使用openid列表，必须提供appid
+
+    optional uint32 uint32_req_nick = 20002;  // nick name
+    optional uint32 uint32_req_gender = 20009; // gender
+    optional uint32 uint32_req_allow = 20014; // allow
+    optional uint32 uint32_req_face_id = 20015; // face_id
+    optional uint32 uint32_req_common_place1 = 20027; // common_place1
+    optional uint32 uint32_req_birthday = 20031; // birthday
+    optional uint32 uint32_req_full_birthday = 26004; // full birthday
+    optional uint32 uint32_req_full_age = 26005; // full age
+    optional uint32 uint32_req_country = 20003; // country
+    optional uint32 uint32_req_province = 20004; // province
+    optional uint32 uint32_req_city = 20020; // city
+    optional uint32 uint32_req_constellation = 20022; //constellation 
+    optional uint32 uint32_req_city_id = 20032; // city_id
+    optional uint32 uint32_req_city_zone_id = 20041; // city_zone_id
+    optional uint32 uint32_req_lang1 = 20033; // lang1
+    optional uint32 uint32_req_lang2 = 20034; // lang2
+    optional uint32 uint32_req_lang3 = 20035; // lang3
+    optional uint32 uint32_req_age = 20037; // lang3
+    optional uint32 uint32_req_oin = 20056; // open uin
+    optional uint32 uint32_req_simple_update_time = 26010; // simple data's update time
+    optional uint32 uint32_req_group_mem_credit_flag = 27022; // group_mem_credit_flag
+    optional uint32 uint32_req_face_addon_id = 27025; // face_addon_id
+    optional uint32 uint32_req_bubble_id = 20059; // bubble_id
+    optional uint32 uint32_req_music_gene = 27026; // music_gene
+
+    optional uint32 uint32_req_lflag = 21003; // lflag
+    optional uint32 uint32_req_ext_flag = 21004; // ext_flag
+    optional uint32 uint32_req_basic_svr_flag = 21006; // basic_svr_flag
+    optional uint32 uint32_req_basic_cli_flag = 21007; // basic_cli_flag
+
+    optional uint32 uint32_req_mss1_service = 21002; // mss1 sService[8]
+    optional uint32 uint32_req_mss2_identity = 21001; // mss2 sIdentity[4]
+    optional uint32 uint32_req_mss3_bitmapextra = 20030; // mss3 sBitmapExtra[8]
+    optional uint32 uint32_req_mss_update_time = 26011; // mss_update_time
+
+    optional uint32 uint32_req_stranger_nick = 27034; //陌生人交友资料
+    optional uint32 uint32_req_love_status = 27036; //情感状态 
+    optional uint32 uint32_req_profession = 27037; //职业
+    optional uint32 uint32_req_mask_lightalk = 40506; // mask_lightalk
+    optional uint32 uint32_req_vip_flag = 41756; //member flag
+    optional uint32 uint32_req_auth_flag = 41783; //appointmeng auth flag
+};
+
+
+
+message UdcUinData
+{
+    optional uint64 uint64_uin = 1; // uin
+    optional bytes bytes_openid = 4; // openid,请求包使用openid为key查询数据时这里只会返回openid,不会返回uin
+
+    optional bytes bytes_nick = 20002;  // nick name
+    optional uint32 uint32_gender = 20009; // gender
+    optional uint32 uint32_allow = 20014;  // 加好友验证方式 0--允许任何人 1--需要验证 2-不允许任何人 3-需要正确回答问题 4--需要回答问题并
+    optional uint32 uint32_face_id = 20015; // 系统头像ID
+    optional uint32 uint32_common_place1 = 20027; // common_place1，户口
+    optional bytes bytes_birthday = 20031; // birthday，byte0-byte1 年份(1800-2100，0表示未填）；byte2 月份(0-12)；byte3 日期(0-31)
+    optional bytes bytes_full_birthday = 26004; // byte0: 公历(0),农历(1); byte1: byte0为1时，非闰月(0),闰月(1); byte2~byte5: 生日(公历或农历的年月日)
+    optional bytes bytes_full_age = 26005; // 二字节，byte0: 公历(0),农历(1); byte1: 年龄
+    optional bytes bytes_country = 20003; // 国家名称
+    optional bytes bytes_province = 20004; // 省份名称
+    optional bytes bytes_city = 20020; // 城市名称
+    optional uint32 uint32_constellation = 20022; //constellation 
+    optional bytes bytes_city_id = 20032; // 12字节，分别是 dwContryID - dwProvinceID - dwCityID，网络序
+    optional uint32 uint32_city_zone_id = 20041; // dwCityZoneID
+    optional uint32 uint32_lang1 = 20033; // lang1
+    optional uint32 uint32_lang2 = 20034; // lang2
+    optional uint32 uint32_lang3 = 20035; // lang3
+    optional uint32 uint32_age = 20037; // age
+    optional uint32 uint32_oin = 20056; // open uin
+    optional uint32 uint32_simple_update_time = 26010; // simple data's update time
+    optional uint32 uint32_group_mem_credit_flag = 27022; // group_mem_credit_flag
+    optional uint64 uint64_face_addon_id = 27025; // face_addon_id
+    optional uint32 uint32_bubble_id = 20059; // bubble_id
+    optional bytes bytes_music_gene = 27026; // music_gene
+
+    optional uint32 uint32_lflag = 21003; // lflag
+    optional uint32 uint32_ext_flag = 21004; // ext_flag
+    optional bytes bytes_basic_svr_flag = 21006; // basic_svr_flag, 20 bytes
+    optional bytes bytes_basic_cli_flag = 21007; // basic_cli_flag, 20 bytes
+
+    optional bytes bytes_mss1_service = 21002; // 增值位1 sService[8]，低字节到高字节顺序，字节内第0个bit为最高bit
+    optional bytes bytes_mss2_identity = 21001; // 增值位2 sIdentity[4]，低字节到高字节顺序，字节内第0个bit为最高bit
+    optional bytes bytes_mss3_bitmapextra = 20030; // 增值位3 sBitmapExtra[8]，低字节到高字节顺序，字节内第0个bit为最高bit
+    optional uint32 uint32_mss_update_time = 26011; // 增值位的最近更新时间
+    optional bytes bytes_stranger_nick = 27034; //陌生人交友昵称
+    optional uint32 uint32_love_status = 27036; //情感状态 
+    optional uint32 uint32_profession = 27037; //职业
+    optional uint32 uint32_mask_lightalk = 40506; // 彪Lightalk鞛膦
+    optional uint32 uint32_vip_flag = 41756; //member flag
+    optional uint32 uint32_auth_flag = 41783; //appointmeng auth flag
+};
+
+message RspBody
+{
+    repeated UdcUinData rpt_msg_uin_data = 11; // uin data list
+    repeated uint64 rpt_uint64_unfinished_uins = 12; // 因为分包，未被处理的Uin列表
+};
+
+

@@ -11,7 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 // Constants for view sizing and alignment
-#define MESSAGE_FONT_SIZE       (16.0)
+#define MESSAGE_FONT_SIZE       (13.0)
 #define BUFFER_WHITE_SPACE      (14.0)
 #define DETAIL_TEXT_LABEL_WIDTH (200.0)
 
@@ -42,6 +42,10 @@
 @property (retain, nonatomic) UIImage *balloonImageRight;
 @property (assign, nonatomic) UIEdgeInsets balloonInsets;
 
+@property (strong, nonatomic) AVAudioPlayer *avPlay;
+
+@property (weak, nonatomic) XMPPMessageArchiving_Message_CoreDataObject *message;
+
 @end
 
 
@@ -58,8 +62,10 @@
         
         // Initialization the views
         _balloonView = [UIImageView new];
+        
         _soundLengthLabel = [UILabel new];
         _soundLengthLabel.font=[UIFont systemFontOfSize:MESSAGE_FONT_SIZE];
+        _soundLengthLabel.textAlignment=NSTextAlignmentCenter;
         
         self.logoView=[[UIImageView alloc] init];
         self.logoView.frame=CGRectMake(0, 0, LOGOWIDTH, LOGOWIDTH);
@@ -77,21 +83,45 @@
         [_balloonView addSubview:_soundLengthLabel];
         [_balloonView addSubview:self.soundView];
         [self addSubview:self.logoView];
+        
+        UITapGestureRecognizer* tap=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(paly)];
+        [_balloonView addGestureRecognizer:tap];
+        _balloonView.userInteractionEnabled=YES;
     }
     return self;
 }
 
+-(void)paly
+{
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSError *err = nil;
+    [audioSession setCategory:AVAudioSessionCategoryPlayback error:&err];
+    
+    if (self.avPlay.playing) {
+        [self.avPlay stop];
+        return;
+    }
+    
+    NSData *sound = [[NSData alloc] initWithBase64Encoding:self.message.body];
+    AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithData:sound error:nil];
+    self.avPlay = player;
+    [self.avPlay play];
+    
+    self.avPlay.volume=1.0;
+}
+
+
 // Method for setting the transcript object which is used to build this view instance.
 - (void)setData:(XMPPMessageArchiving_Message_CoreDataObject *)message photo:(UIImage *)photo
 {
-    // Set the message text
+    self.message=message;
     
     // Compute message size and frames
     CGSize balloonSize = [SoundView balloonSizeForLabelSize:CGSizeZero];
     
     NSData *sound = [[NSData alloc] initWithBase64Encoding:message.body];
     AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithData:sound error:nil];
-    _soundLengthLabel.text = [NSString stringWithFormat:@"%f''",player.duration];
+    _soundLengthLabel.text = [NSString stringWithFormat:@"%d''",(NSInteger)player.duration];
 
     
     if (message.isOutgoing) {
@@ -103,10 +133,10 @@
         
         // Set text color
         _soundLengthLabel.textColor = [UIColor whiteColor];
-        _soundLengthLabel.frame=CGRectMake(BALLOON_INSET_X, BALLOON_Y_PANDING, 40, BALLOON_INSET_Y);
-        
+        _soundLengthLabel.frame=CGRectMake((balloonSize.width-30)/2, BALLOON_Y_PANDING, 30, BALLOON_INSET_Y);
+
         UIImage* image=[UIImage imageNamed:@"voice_send_icon_nor.png"];
-        _soundView.frame=CGRectMake(BALLOON_INSET_X+40, BALLOON_Y_PANDING, image.size.width, image.size.height);
+        _soundView.frame=CGRectMake(CGRectGetMaxX(_soundLengthLabel.frame), BALLOON_Y_PANDING, image.size.width, image.size.height);
         _soundView.image=image;
         
         // Set resizeable image
@@ -147,7 +177,7 @@
 
 + (CGSize)balloonSizeForLabelSize:(CGSize)labelSize
 {
-    return CGSizeMake(150, BALLOON_INSET_Y+BALLOON_Y_PANDING*2);
+    return CGSizeMake(120, BALLOON_INSET_Y+BALLOON_Y_PANDING*2);
 }
 
 

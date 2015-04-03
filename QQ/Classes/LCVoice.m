@@ -137,7 +137,7 @@
 
         double ALPHA = 0.05;
         double peakPowerForChannel = pow(10, (ALPHA * peakPower));
-        NSLog(@"%f",peakPowerForChannel);
+//        NSLog(@"%f",peakPowerForChannel);
         
         [voiceHud_ setProgress:peakPowerForChannel];
     }

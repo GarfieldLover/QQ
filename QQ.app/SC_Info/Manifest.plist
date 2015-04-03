@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SinfPaths</key>
+	<array>
+		<string>SC_Info/QQ.sinf</string>
+	</array>
+	<key>SinfReplicationPaths</key>
+	<array>
+		<string>PlugIns/QQExtActionQlink.appex/SC_Info/QQExtActionQlink.sinf</string>
+		<string>PlugIns/QQShare.appex/SC_Info/QQShare.sinf</string>
+		<string>SC_Info/QQ.sinf</string>
+	</array>
+</dict>
+</plist>
