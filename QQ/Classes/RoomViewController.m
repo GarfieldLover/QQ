@@ -150,7 +150,7 @@
 {
     XMPPMessageArchiving_Message_CoreDataObject *object = [self.messageArray objectAtIndex:indexPath.row];
     
-    if ([object.message.type isEqualToString:@"string"]) {
+    if ([object.message.type isEqualToString:@"groupchat"]) {
         return [MessageView viewHeightForTranscript:object];
     }else{
         return [SoundView viewHeightForTranscript:object];
@@ -181,7 +181,7 @@
     
     UITableViewCell* cell=nil;
     
-    if ([object.message.type isEqualToString:@"string"]) {
+    if ([object.message.type isEqualToString:@"groupchat"]) {
         
         static NSString *CellIdentifier = @"MessageView";
         
@@ -365,7 +365,8 @@
 
 
 - (void)sendMessage{
-    XMPPMessage *message = [XMPPMessage messageWithType:@"string" to:self.xmppRoom.roomJID];
+    //只能groupchat，语音后跟      语音文件
+    XMPPMessage *message = [XMPPMessage messageWithType:@"groupchat" to:self.xmppRoom.roomJID];
     [message addBody:self.messageTextField.text];
     [[[self appDelegate] xmppStream] sendElement:message];
 }

@@ -324,10 +324,6 @@
 {
     NSLog(@"jid:%@  presence ; %@",occupantJID,presence);
 
-//    self.roomVC=[[RoomViewController alloc] init];
-//    self.roomVC.xmppRoom = _xmppRoom;
-//    [self.navigationController pushViewController:self.roomVC animated:YES];
-    
 }
 - (void)xmppRoom:(XMPPRoom *)sender occupantDidLeave:(XMPPJID *)occupantJID withPresence:(XMPPPresence *)presence
 {

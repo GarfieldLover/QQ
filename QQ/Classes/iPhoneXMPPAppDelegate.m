@@ -432,10 +432,6 @@
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq
 {
 	DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
-    NSLog(@"didReceiveIQ: %@",iq.description);
-    
-    
-
 	return YES;
 }
 
