@@ -1,8 +1,8 @@
 //
-//  SoundView.h
+//  ImageView.h
 //  QQ
 //
-//  Created by zhangke on 15/4/3.
+//  Created by zhangke on 15/4/8.
 //  Copyright (c) 2015年 zhangke. All rights reserved.
 //
 
@@ -11,11 +11,7 @@
 @class XMPPMessageArchiving_Message_CoreDataObject;
 @class XMPPUserCoreDataStorageObject;
 
-
-
-@interface SoundView : UITableViewCell
-
-
+@interface ImageView : UITableViewCell
 
 // Class method for computing a view height based on a given message transcript
 + (CGFloat)viewHeightForTranscript:(XMPPMessageArchiving_Message_CoreDataObject *)transcript;

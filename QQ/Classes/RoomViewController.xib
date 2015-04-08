@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RoomViewController">
             <connections>
+                <outlet property="aioView" destination="9pB-Gu-Nzb" id="YN3-EP-hir"/>
                 <outlet property="messageTextField" destination="Egl-1K-fiH" id="GUS-zi-xTe"/>
                 <outlet property="tableView" destination="9ix-kA-OI9" id="sq7-ku-hdL"/>
                 <outlet property="toolbar" destination="r2X-fJ-tne" id="z3h-zF-bTo"/>
@@ -74,12 +75,15 @@
                                 <state key="normal" title="Button" image="chat_bottom_up_nor@3x.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="aio:" destination="-1" eventType="touchUpInside" id="9rk-l1-IbV"/>
+                                </connections>
                             </button>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="eju-f7-L8G"/>
                     </items>
                 </toolbar>
-                <view alpha="0.59999999999999998" contentMode="scaleToFill" id="paS-sA-JRq">
+                <view contentMode="scaleToFill" id="paS-sA-JRq">
                     <rect key="frame" x="0.0" y="568" width="320" height="180"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -106,12 +110,70 @@
                     </subviews>
                     <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <view contentMode="scaleToFill" id="9pB-Gu-Nzb">
+                    <rect key="frame" x="0.0" y="568" width="320" height="180"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WNm-DC-8KE">
+                            <rect key="frame" x="235" y="109" width="50" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="aio_icons_video@3x.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ipI-6f-988">
+                            <rect key="frame" x="133" y="109" width="50" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="aio_icons_location@3x.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Pub-lj-7Zk">
+                            <rect key="frame" x="36" y="109" width="50" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="aio_icons_folder@3x.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2fv-AM-y9s">
+                            <rect key="frame" x="235" y="21" width="50" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="aio_icons_freeaudio@3x.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="J6H-M6-Cjp">
+                            <rect key="frame" x="36" y="21" width="50" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="aio_icons_pic@3x.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="pic:" destination="-1" eventType="touchUpInside" id="uWB-Nm-hgo"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8IP-0D-dKR">
+                            <rect key="frame" x="133" y="21" width="50" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="aio_icons_camera@3x.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="0.88415809140000001" green="0.89714536590000005" blue="0.88159695900000001" alpha="1" colorSpace="calibratedRGB"/>
             <point key="canvasLocation" x="435" y="286"/>
         </view>
     </objects>
     <resources>
+        <image name="aio_icons_camera@3x.png" width="150" height="150"/>
+        <image name="aio_icons_folder@3x.png" width="150" height="150"/>
+        <image name="aio_icons_freeaudio@3x.png" width="150" height="150"/>
+        <image name="aio_icons_location@3x.png" width="150" height="150"/>
+        <image name="aio_icons_pic@3x.png" width="150" height="150"/>
+        <image name="aio_icons_video@3x.png" width="150" height="150"/>
         <image name="chat_bottom_smile_nor@3x.png" width="102" height="102"/>
         <image name="chat_bottom_up_nor@3x.png" width="102" height="102"/>
         <image name="chat_bottom_voice_nor@3x.png" width="102" height="102"/>

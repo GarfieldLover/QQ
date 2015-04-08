@@ -20,6 +20,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *voiceView;
 
+@property (weak, nonatomic) IBOutlet UIView *aioView;
 
 
 @end

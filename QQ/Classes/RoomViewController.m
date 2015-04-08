@@ -13,8 +13,9 @@
 #import "XMPPvCardTemp.h"
 #import "LCVoice.h"
 #import "SoundView.h"
+#import "ImageView.h"
 
-@interface RoomViewController ()<NSFetchedResultsControllerDelegate,UIScrollViewDelegate>{
+@interface RoomViewController ()<NSFetchedResultsControllerDelegate,UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>{
     NSFetchedResultsController *fetchedResultsController;
     
 }
@@ -150,10 +151,14 @@
 {
     XMPPMessageArchiving_Message_CoreDataObject *object = [self.messageArray objectAtIndex:indexPath.row];
     
-    if ([object.message.type isEqualToString:@"groupchat"]) {
-        return [MessageView viewHeightForTranscript:object];
-    }else{
+    if ([object.body hasPrefix:@"sound"]) {
         return [SoundView viewHeightForTranscript:object];
+    }else if ([object.body hasPrefix:@"image"]) {
+        return [ImageView viewHeightForTranscript:object];
+        
+    }else{
+        return [MessageView viewHeightForTranscript:object];
+
     }
     return 0;
 }
@@ -181,18 +186,7 @@
     
     UITableViewCell* cell=nil;
     
-    if ([object.message.type isEqualToString:@"groupchat"]) {
-        
-        static NSString *CellIdentifier = @"MessageView";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if(cell==nil){
-            cell=[[MessageView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        [(MessageView*)cell setData:object photo:[self getImage:object]];
-        
-    }else if ([object.message.type isEqualToString:@"sound"]){
+    if ([object.body hasPrefix:@"sound"]) { 
         
         static NSString *CellIdentifier = @"SoundView";
         
@@ -203,6 +197,26 @@
         
         [(SoundView*)cell setData:object photo:[self getImage:object]];
         
+    }else if([object.body hasPrefix:@"image"]){
+        
+        static NSString *CellIdentifier = @"ImageView";
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if(cell==nil){
+            cell=[[ImageView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        [(ImageView*)cell setData:object photo:[self getImage:object]];
+    }else{
+        
+        static NSString *CellIdentifier = @"MessageView";
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if(cell==nil){
+            cell=[[MessageView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        [(MessageView*)cell setData:object photo:[self getImage:object]];
     }
     
     
@@ -232,6 +246,7 @@
     XMPPvCardTemp* vCardTemp=[[[self appDelegate] xmppvCardTempModule] vCardTempForJID:jid shouldFetch:YES];
     return [UIImage imageWithData:vCardTemp.photo];
 }
+
 
 #pragma mark - keyboard reference
 -(void)WillChangeFrame:(NSNotification *)notif{
@@ -296,7 +311,15 @@
         keyButton.tag=1;
         [keyButton addTarget:self action:@selector(voice:) forControlEvents:UIControlEventTouchUpInside];
         
+        UIButton* aioButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [aioButton setImage:[UIImage imageNamed:@"chat_bottom_up_nor.png"] forState:UIControlStateNormal];
+        aioButton.frame=CGRectMake(2, 2, 40, 40);
+        aioButton.tag=0;
+        [aioButton addTarget:self action:@selector(aio:) forControlEvents:UIControlEventTouchUpInside];
+        
+
         NSMutableArray* array=[NSMutableArray arrayWithArray:self.toolbar.items];
+        array[5]=[[UIBarButtonItem alloc] initWithCustomView:aioButton];
         array[1]=[[UIBarButtonItem alloc] initWithCustomView:keyButton];
         self.toolbar.items=array;
         
@@ -393,8 +416,9 @@
 
             //将NSData转成base64的NSString类型
             NSString *sound=[soundData base64Encoding];
+            sound=[@"sound" stringByAppendingString:sound];
             
-            XMPPMessage *message = [XMPPMessage messageWithType:@"sound" to:self.xmppRoom.roomJID];
+            XMPPMessage *message = [XMPPMessage messageWithType:@"groupchat" to:self.xmppRoom.roomJID];
             [message addBody:sound];
             [[[self appDelegate] xmppStream] sendElement:message];
 
@@ -406,6 +430,116 @@
 {
     [self.voice cancelled];
 }
+
+
+-(IBAction)aio:(id)sender
+{
+    if([(UIButton*)sender tag]==0){
+        [self.messageTextField resignFirstResponder];
+        self.messageTextField.hidden=YES;
+
+        UIButton* keyButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [keyButton setImage:[UIImage imageNamed:@"chat_bottom_keyboard_nor.png"] forState:UIControlStateNormal];
+        keyButton.frame=CGRectMake(2, 2, 40, 40);
+        keyButton.tag=1;
+        [keyButton addTarget:self action:@selector(aio:) forControlEvents:UIControlEventTouchUpInside];
+        
+        NSMutableArray* array=[NSMutableArray arrayWithArray:self.toolbar.items];
+        array[5]=[[UIBarButtonItem alloc] initWithCustomView:keyButton];
+        self.toolbar.items=array;
+        
+
+        CGRect rect =self.toolbar.frame;
+        rect.origin.y=self.view.frame.size.height- ( self.aioView.frame.size.height+rect.size.height );
+        
+        CGRect rect2=self.aioView.frame;
+        rect2.origin.y=self.view.frame.size.height-rect2.size.height;
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            self.toolbar.frame=rect;
+            
+            self.aioView.frame=rect2;
+            self.tableView.frame = CGRectMake(0, 0, self.view.bounds.size.width, rect.origin.y);
+            
+            if(self.messageArray.count>0){
+                NSIndexPath* indexPath=[NSIndexPath indexPathForRow:self.messageArray.count-1 inSection:0];
+                [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            }
+        } completion:^(BOOL finish){
+            
+        }];
+        
+    }else{
+        [self.messageTextField becomeFirstResponder];
+        self.messageTextField.hidden=NO;
+
+        UIButton* aioButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [aioButton setImage:[UIImage imageNamed:@"chat_bottom_up_nor.png"] forState:UIControlStateNormal];
+        aioButton.frame=CGRectMake(2, 2, 40, 40);
+        aioButton.tag=0;
+        [aioButton addTarget:self action:@selector(aio:) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIButton* voiceButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [voiceButton setImage:[UIImage imageNamed:@"chat_bottom_voice_nor.png"] forState:UIControlStateNormal];
+        voiceButton.frame=CGRectMake(2, 2, 40, 40);
+        voiceButton.tag=0;
+        [voiceButton addTarget:self action:@selector(voice:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        NSMutableArray* array=[NSMutableArray arrayWithArray:self.toolbar.items];
+        array[1]=[[UIBarButtonItem alloc] initWithCustomView:voiceButton];
+        array[5]=[[UIBarButtonItem alloc] initWithCustomView:aioButton];
+        self.toolbar.items=array;
+        
+        
+        CGRect rect2=self.aioView.frame;
+        rect2.origin.y=self.view.frame.size.height;
+        
+        [UIView animateWithDuration:0.2 animations:^{
+            self.aioView.frame=rect2;
+        } completion:^(BOOL finish){
+            
+        }];
+    }
+    
+}
+
+
+
+-(IBAction)pic:(id)sender
+{
+    UIImagePickerController* picker=[[UIImagePickerController alloc] init];
+    picker.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.delegate=self;
+    [self.navigationController presentViewController:picker animated:YES completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage* image=[info objectForKey:UIImagePickerControllerOriginalImage];
+
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.4);
+    
+
+    //将NSData转成base64的NSString类型
+    NSString *imageString=[imageData base64Encoding];
+    imageString=[@"image" stringByAppendingString:imageString];
+    
+    XMPPMessage *message = [XMPPMessage messageWithType:@"groupchat" to:self.xmppRoom.roomJID];
+    [message addBody:imageString];
+    [[[self appDelegate] xmppStream] sendElement:message];
+    
+    [picker dismissViewControllerAnimated:YES completion:nil];
+
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+
+}
+
+
+
 
 
 
