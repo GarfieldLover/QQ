@@ -119,7 +119,7 @@
 - (void)setData:(XMPPMessageArchiving_Message_CoreDataObject *)message photo:(UIImage *)photo
 {
     // Set the message text
-    NSString *messageText = message.body;
+    NSString *messageText = [message.body substringFromIndex:5];
     _messageLabel.text = messageText;
 
     // Compute message size and frames

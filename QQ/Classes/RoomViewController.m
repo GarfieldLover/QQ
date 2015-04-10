@@ -14,6 +14,8 @@
 #import "LCVoice.h"
 #import "SoundView.h"
 #import "ImageView.h"
+#import "XMPPTableViewCell.h"
+#import "XMPPTableViewCellProtocol.h"
 
 @interface RoomViewController ()<NSFetchedResultsControllerDelegate,UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>{
     NSFetchedResultsController *fetchedResultsController;
@@ -43,8 +45,12 @@
     self.messageArray=[NSMutableArray array];
     //历史数据
     for(XMPPMessageArchiving_Message_CoreDataObject* object in [[self fetchedResultsController] fetchedObjects]){
-        if(![object.message.fromStr isEqualToString:self.xmppRoom.myRoomJID.full]){
-            [self.messageArray addObject:object];
+        if(![object.message.fromStr isEqualToString:self.xmppRoom.myRoomJID.full] && ![self.messageArray containsObject:object]){
+            NSPredicate* pre=[NSPredicate predicateWithFormat:@"body==%@",object.body];
+            NSArray* array=[self.messageArray filteredArrayUsingPredicate:pre];
+            if(array.count==0){
+                [self.messageArray addObject:object];
+            }
         }
     }
     if(self.messageArray.count>0){
@@ -65,11 +71,17 @@
     if(self.xmppRoom){
         [self.xmppRoom leaveRoom];
         [self.xmppRoom deactivate];
+        [self.xmppRoom destroyRoom];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-
+-(void)dealloc
+{
+    fetchedResultsController.delegate=nil;
+    fetchedResultsController=nil;
+    
+}
 
 - (iPhoneXMPPAppDelegate *)appDelegate
 {
@@ -92,7 +104,7 @@
         NSArray *sortDescriptors = @[sd1];
         
 //        NSPredicate* pre=[NSPredicate predicateWithFormat:@"bareJidStr=%@ AND NOT (messageStr CONTAINS[cd] %@)",self.xmppRoom.roomJID.full,self.xmppRoom.myRoomJID.full];
-        NSPredicate* pre=[NSPredicate predicateWithFormat:@"bareJidStr=%@",self.xmppRoom.roomJID.full];
+        NSPredicate* pre=[NSPredicate predicateWithFormat:@"bareJidStr==%@",self.xmppRoom.roomJID.full];
 //        NSPredicate *pre = [NSPredicate predicateWithFormat:@"NOT (messageStr CONTAINS[cd] %@) AND NOT (messageStr CONTAINS[cd] %@)", self.xmppRoom.myRoomJID.full, @"from"];
 
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -125,7 +137,11 @@
 
     for(XMPPMessageArchiving_Message_CoreDataObject* object in [[self fetchedResultsController] fetchedObjects]){
         if(![object.message.fromStr isEqualToString:self.xmppRoom.myRoomJID.full]){
-            [self.messageArray addObject:object];
+            NSPredicate* pre=[NSPredicate predicateWithFormat:@"body==%@",object.body];
+            NSArray* array=[self.messageArray filteredArrayUsingPredicate:pre];
+            if(array.count==0){
+                [self.messageArray addObject:object];
+            }
         }
     }
 
@@ -151,16 +167,10 @@
 {
     XMPPMessageArchiving_Message_CoreDataObject *object = [self.messageArray objectAtIndex:indexPath.row];
     
-    if ([object.body hasPrefix:@"sound"]) {
-        return [SoundView viewHeightForTranscript:object];
-    }else if ([object.body hasPrefix:@"image"]) {
-        return [ImageView viewHeightForTranscript:object];
-        
-    }else{
-        return [MessageView viewHeightForTranscript:object];
-
-    }
-    return 0;
+    NSDictionary* dic=[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"MessageType" ofType:@"plist"]];
+    NSString* classString =[dic objectForKey:[object.body substringToIndex:5]];
+    Class aClass=NSClassFromString(classString);
+    return [aClass viewHeightForTranscript:object];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -184,44 +194,21 @@
 {
     XMPPMessageArchiving_Message_CoreDataObject *object = self.messageArray[indexPath.row];
     
-    UITableViewCell* cell=nil;
+    NSDictionary* dic=[NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"MessageType" ofType:@"plist"]];
+    NSString* classString =[dic objectForKey:[object.body substringToIndex:5]];
+    Class aClass=NSClassFromString(classString);
     
-    if ([object.body hasPrefix:@"sound"]) { 
-        
-        static NSString *CellIdentifier = @"SoundView";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if(cell==nil){
-            cell=[[SoundView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        [(SoundView*)cell setData:object photo:[self getImage:object]];
-        
-    }else if([object.body hasPrefix:@"image"]){
-        
-        static NSString *CellIdentifier = @"ImageView";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if(cell==nil){
-            cell=[[ImageView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        [(ImageView*)cell setData:object photo:[self getImage:object]];
-    }else{
-        
-        static NSString *CellIdentifier = @"MessageView";
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if(cell==nil){
-            cell=[[MessageView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        [(MessageView*)cell setData:object photo:[self getImage:object]];
+    
+    XMPPTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:classString];
+    if(cell==nil){
+        cell=[[aClass alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:classString];
     }
     
+    [cell setData:object photo:[self getImage:object]];
     
     return cell;
 }
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -390,7 +377,8 @@
 - (void)sendMessage{
     //只能groupchat，语音后跟      语音文件
     XMPPMessage *message = [XMPPMessage messageWithType:@"groupchat" to:self.xmppRoom.roomJID];
-    [message addBody:self.messageTextField.text];
+    NSString* text= [@"chatT" stringByAppendingString:self.messageTextField.text];
+    [message addBody:text];
     [[[self appDelegate] xmppStream] sendElement:message];
 }
 

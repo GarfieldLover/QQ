@@ -196,6 +196,8 @@
 		BD207AD11AD521E100B42E6F /* chat_bottom_up_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BD207AD01AD521E100B42E6F /* chat_bottom_up_nor@2x.png */; };
 		BD207B061AD5263D00B42E6F /* File.strings in Resources */ = {isa = PBXBuildFile; fileRef = BD207B081AD5263D00B42E6F /* File.strings */; };
 		BD207B0C1AD5297B00B42E6F /* ImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = BD207B0B1AD5297B00B42E6F /* ImageView.m */; };
+		BD207B0F1AD53A4100B42E6F /* XMPPTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BD207B0E1AD53A4100B42E6F /* XMPPTableViewCell.m */; };
+		BDEC74711AD682BB00D42198 /* MessageType.plist in Resources */ = {isa = PBXBuildFile; fileRef = BDEC74701AD682BB00D42198 /* MessageType.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -555,6 +557,10 @@
 		BD207B091AD5264600B42E6F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/File.strings"; sourceTree = "<group>"; };
 		BD207B0A1AD5297B00B42E6F /* ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageView.h; sourceTree = "<group>"; };
 		BD207B0B1AD5297B00B42E6F /* ImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageView.m; sourceTree = "<group>"; };
+		BD207B0D1AD53A4100B42E6F /* XMPPTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPTableViewCell.h; sourceTree = "<group>"; };
+		BD207B0E1AD53A4100B42E6F /* XMPPTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPTableViewCell.m; sourceTree = "<group>"; };
+		BD207B101AD53A9200B42E6F /* XMPPTableViewCellProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XMPPTableViewCellProtocol.h; sourceTree = "<group>"; };
+		BDEC74701AD682BB00D42198 /* MessageType.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MessageType.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -630,6 +636,9 @@
 				BD14E6AC1ACD6EC6009F7E78 /* MemberViewController.h */,
 				BD14E6AD1ACD6EC6009F7E78 /* MemberViewController.m */,
 				BD14E6AE1ACD6EC6009F7E78 /* MemberViewController.xib */,
+				BD207B101AD53A9200B42E6F /* XMPPTableViewCellProtocol.h */,
+				BD207B0D1AD53A4100B42E6F /* XMPPTableViewCell.h */,
+				BD207B0E1AD53A4100B42E6F /* XMPPTableViewCell.m */,
 				BD14E6AF1ACD6EC6009F7E78 /* MessageView.h */,
 				BD14E6B01ACD6EC6009F7E78 /* MessageView.m */,
 				BD091FB11ACEA1FA008640E4 /* SoundView.h */,
@@ -642,6 +651,7 @@
 				BD14E6A91ACD6EC6009F7E78 /* LCVoice.m */,
 				BD14E6AA1ACD6EC6009F7E78 /* LCVoiceHud.h */,
 				BD14E6AB1ACD6EC6009F7E78 /* LCVoiceHud.m */,
+				BDEC74701AD682BB00D42198 /* MessageType.plist */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1636,6 +1646,7 @@
 				BD14EC691ACD6ECA009F7E78 /* chat_send_nor@2x.png in Resources */,
 				BD14EC6A1ACD6ECA009F7E78 /* Default-568h@2x.png in Resources */,
 				BD207B061AD5263D00B42E6F /* File.strings in Resources */,
+				BDEC74711AD682BB00D42198 /* MessageType.plist in Resources */,
 				BD14EC671ACD6ECA009F7E78 /* chat_bottom_voice_nor@3x.png in Resources */,
 				BD14EC641ACD6ECA009F7E78 /* chat_bottom_keyboard_nor@3x.png in Resources */,
 				BD14EC611ACD6ECA009F7E78 /* SettingsViewController.xib in Resources */,
@@ -1729,6 +1740,7 @@
 				BD14ECC61ACD6ECA009F7E78 /* XMPPCapsCoreDataStorageObject.m in Sources */,
 				BD14EC7C1ACD6ECA009F7E78 /* XMPPIQ.m in Sources */,
 				BD14EC761ACD6ECA009F7E78 /* XMPPXOAuth2Google.m in Sources */,
+				BD207B0F1AD53A4100B42E6F /* XMPPTableViewCell.m in Sources */,
 				BD14EC8E1ACD6ECA009F7E78 /* XMPPRosterCoreDataStorage.m in Sources */,
 				BD14ECCC1ACD6ECA009F7E78 /* XMPPMessageArchivingCoreDataStorage.m in Sources */,
 				BD14ECB31ACD6ECA009F7E78 /* XMPPvCardTempLabel.m in Sources */,

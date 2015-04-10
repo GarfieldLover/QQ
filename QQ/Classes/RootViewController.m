@@ -342,7 +342,10 @@
  **/
 - (void)xmppRoom:(XMPPRoom *)sender didReceiveMessage:(XMPPMessage *)message fromOccupant:(XMPPJID *)occupantJID
 {
-    
+    if([_xmppRoom.myRoomJID isEqualToJID:occupantJID]){
+        return;
+    }
+
 }
 
 - (void)xmppRoom:(XMPPRoom *)sender didFetchBanList:(NSArray *)items

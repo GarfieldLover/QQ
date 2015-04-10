@@ -7,16 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XMPPTableViewCell.h"
 
-@class XMPPMessageArchiving_Message_CoreDataObject;
-@class XMPPUserCoreDataStorageObject;
 
-@interface ImageView : UITableViewCell
-
-// Class method for computing a view height based on a given message transcript
-+ (CGFloat)viewHeightForTranscript:(XMPPMessageArchiving_Message_CoreDataObject *)transcript;
-
-- (void)setData:(XMPPMessageArchiving_Message_CoreDataObject *)message photo:(UIImage*)photo;
+@interface ImageView : XMPPTableViewCell
 
 
 @end
